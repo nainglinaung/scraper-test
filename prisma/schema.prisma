@@ -9,11 +9,10 @@ datasource db {
 
 model search_results {
   id                              Int      @id @default(autoincrement())
-  adswords_count                  String
+  adswords_count                  Int
   keyword                         String
-  link_count                      String?
+  link_count                      Int?
   total_search_result_for_keyword String?
-  published                       Boolean  @default(false)
   raw_html                        String
   // author User @relation(fields: [authorId], references: [id])
   createdAt                       DateTime @default(now())

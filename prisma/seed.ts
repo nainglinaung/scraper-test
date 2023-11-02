@@ -9,9 +9,9 @@ async function main() {
   // create two dummy articles
   const post1 = await prisma.search_results.create({
     data: {
-      adswords_count: '10',
+      adswords_count: 10,
       keyword: 'test',
-      link_count: '10',
+      link_count: 10,
       total_search_result_for_keyword: '20',
       raw_html: 'asdsad',
     },
