@@ -1,14 +1,19 @@
 // src/bull/bull.service.ts
 import { Injectable } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { CSVInputDTO } from './job.dto';
+import { CSVInputDTO } from '../DTO/job.dto';
 import { Queue, Worker } from 'bullmq';
+import { CrawlerService } from './crawler.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class BullService {
   private queue: Queue;
 
-  constructor() {
+  constructor(
+    private crawlerService: CrawlerService,
+    private prismaService: PrismaService,
+  ) {
     this.queue = new Queue('scrape-search-result');
   }
 
@@ -17,11 +22,24 @@ export class BullService {
   }
 
   async processJobs(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const worker = new Worker('scrape-search-result', async (job) => {
+    new Worker('scrape-search-result', async (job) => {
       const input: CSVInputDTO = job.data;
-      console.log(input);
-      console.log(`Processing job #${job.id}`);
+      const keywordData = await this.prismaService.search_results.findFirst({
+        where: input,
+      });
+
+      if (!keywordData) {
+        const response = await this.crawlerService.getSearchResultData(
+          input.keyword,
+        );
+        const formattedData = this.crawlerService.formatData(
+          response,
+          input.keyword,
+        );
+        await this.prismaService.search_results.create({ data: formattedData });
+      } else {
+        console.log('already existed');
+      }
     });
   }
 }
