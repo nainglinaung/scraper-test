@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { SearchResultModule } from './search-result/search-result.module';
+import { ApiModule } from './api/api.module';
 
 @Module({
-  imports: [SearchResultModule],
+  imports: [ApiModule],
 })
 export class AppModule {}

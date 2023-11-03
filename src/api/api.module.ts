@@ -10,4 +10,4 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [BullQueueModule, PrismaModule],
   controllers: [SearchResultController],
 })
-export class SearchResultModule {}
+export class ApiModule {}
