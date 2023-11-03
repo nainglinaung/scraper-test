@@ -1,19 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateSearchResult } from './search-result.dto';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { CreateSearchResult } from 'src/DTO/search-result.dto';
 import { ApiService } from './api.service';
 
 @Controller('search-result')
 export class SearchResultController {
   constructor(private apiService: ApiService) {}
 
-  @Get('/')
-  findAll() {
-    return this.apiService.findAll();
+  @Get(':keyword')
+  findByKeyword(@Param('keyword') keyword: string) {
+    return this.apiService.findByKeyword(keyword);
   }
 
-  @Post('/test')
-  trigger(@Body('keyword') keyword: string) {
-    return this.apiService.trigger(keyword);
+  @Post('/crawl')
+  crawl(@Body('keyword') keyword: string) {
+    return this.apiService.crawl(keyword);
   }
 
   @Post('/')
