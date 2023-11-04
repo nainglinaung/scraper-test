@@ -7,11 +7,12 @@ import { Queue, Worker } from 'bullmq';
 import { CrawlerService } from './crawler.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { BullQueueService } from './bull-queue.service';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class BullService {
   private queue: Queue;
-
+  private readonly logger = new Logger(BullService.name);
   constructor(
     private crawlerService: CrawlerService,
     private prismaService: PrismaService,
@@ -28,15 +29,14 @@ export class BullService {
     new Worker('scrape-search-result', async (job) => {
       const input: CSVInputDTO = job.data;
       const keywordData = await this.prismaService.search_results.findFirst({
-        where: input,
+        where: { keyword: input.keyword, user_id: input.user_id },
       });
 
       if (!keywordData) {
         const rawData = new RawDataParam();
 
         rawData.keyword = input.keyword;
-        rawData.user_id = 1;
-
+        rawData.user_id = input.user_id;
         rawData.raw_html = await this.crawlerService.getSearchResultData(
           input.keyword,
         );
@@ -45,9 +45,9 @@ export class BullService {
 
         await this.prismaService.search_results.create({ data: formattedData });
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log('finished');
+        this.logger.log(`finished processing ${input.keyword}`);
       } else {
-        console.log('already existed');
+        this.logger.log(`${input.keyword} already existed`);
       }
     });
   }

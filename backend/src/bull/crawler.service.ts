@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import { getRandom } from 'random-useragent';
 import { CreateSearchResult, RawDataParam } from 'src/DTO/search-result.dto';
-
+import { Logger } from '@nestjs/common';
 @Injectable()
 export class CrawlerService {
+  private readonly logger = new Logger(CrawlerService.name);
   async getSearchResultData(keyword: string): Promise<string> {
     try {
       const headers: HeadersInit = new Headers();
@@ -19,7 +20,7 @@ export class CrawlerService {
 
       return response.text();
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
     }
   }
 
@@ -37,7 +38,7 @@ export class CrawlerService {
         ...data,
       };
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
     }
   }
 }

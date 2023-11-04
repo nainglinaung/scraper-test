@@ -19,12 +19,15 @@ export class CreateSearchResult {
 
   @IsNotEmpty()
   @IsNumber()
-  readonly user_id: number;
+  user_id: number;
 }
 
 export class QuerySearchResult {
   @IsString()
   readonly keyword: string;
+
+  @IsNumber()
+  readonly user_id: number;
 }
 
 export class RawDataParam {
