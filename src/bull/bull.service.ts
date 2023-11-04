@@ -4,7 +4,8 @@ import { Job } from 'bullmq';
 import { CSVInputDTO } from '../DTO/job.dto';
 import { Queue, Worker } from 'bullmq';
 import { CrawlerService } from './crawler.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { BullQueueService } from './bull-queue.service';
 
 @Injectable()
 export class BullService {
@@ -13,8 +14,9 @@ export class BullService {
   constructor(
     private crawlerService: CrawlerService,
     private prismaService: PrismaService,
+    private bullQueueService: BullQueueService,
   ) {
-    this.queue = new Queue('scrape-search-result');
+    this.queue = this.bullQueueService.getQueue('scrape-search-result');
   }
 
   async addJob(data: Record<string, any>): Promise<Job> {
@@ -37,6 +39,8 @@ export class BullService {
           input.keyword,
         );
         await this.prismaService.search_results.create({ data: formattedData });
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log('finished');
       } else {
         console.log('already existed');
       }

@@ -4,7 +4,8 @@ import { BullModule } from '@nestjs/bull';
 import { BullService } from './bull.service';
 import { CrawlerService } from './crawler.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
-
+import { PrismaService } from '../prisma/prisma.service';
+import { BullQueueService } from './bull-queue.service';
 @Module({
   imports: [
     BullModule.registerQueue({
@@ -12,7 +13,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
     }),
     PrismaModule,
   ],
-  providers: [BullService, CrawlerService],
+  providers: [BullService, CrawlerService, PrismaService, BullQueueService],
   exports: [BullService],
 })
 export class BullQueueModule {}
