@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import { getRandom } from 'random-useragent';
-import { CreateSearchResult } from 'src/DTO/search-result.dto';
+import { CreateSearchResult, RawDataParam } from 'src/DTO/search-result.dto';
 
 @Injectable()
 export class CrawlerService {
-  async getSearchResultData(keyword: string): Promise<any> {
+  async getSearchResultData(keyword: string): Promise<string> {
     try {
       const headers: HeadersInit = new Headers();
       headers.set('User-Agent', getRandom());
@@ -23,9 +23,9 @@ export class CrawlerService {
     }
   }
 
-  formatData(raw_html, keyword): CreateSearchResult {
+  formatData(data: RawDataParam): CreateSearchResult {
     try {
-      const $ = cheerio.load(raw_html);
+      const $ = cheerio.load(data.raw_html);
       const adswords_count = $('span:contains("Sponsored")').length;
       const total_search_result_for_keyword = $('#result-stats').html();
       const link_count = $('a').length;
@@ -34,8 +34,7 @@ export class CrawlerService {
         adswords_count,
         total_search_result_for_keyword,
         link_count,
-        keyword,
-        raw_html,
+        ...data,
       };
     } catch (error) {
       console.error(error);

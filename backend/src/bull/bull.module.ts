@@ -1,6 +1,6 @@
 // src/bull/bull.module.ts
 import { Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 import { BullService } from './bull.service';
 import { CrawlerService } from './crawler.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
