@@ -26,3 +26,15 @@ export class QuerySearchResult {
   @IsString()
   readonly keyword: string;
 }
+
+export class RawDataParam {
+  @IsNotEmpty()
+  raw_html: string;
+
+  @IsNotEmpty()
+  keyword: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  user_id: number;
+}
