@@ -16,6 +16,10 @@ export class CreateSearchResult {
 
   @IsNotEmpty()
   readonly raw_html: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  readonly user_id: number;
 }
 
 export class QuerySearchResult {
