@@ -1,5 +1,4 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { RegisterDTO, LoginDTO } from 'src/DTO/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +10,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async createUser(data: RegisterDTO) {
+  async createUser(data) {
     const saltOrRounds = 10;
     data.password = await bcrypt.hash(data.password, saltOrRounds);
     return this.prismaService.user.create({ data });
@@ -21,7 +20,7 @@ export class AuthService {
     return this.prismaService.user.findFirst({ where: { id } });
   }
 
-  async login(data: LoginDTO): Promise<{ accessToken: string }> {
+  async login(data): Promise<{ accessToken: string }> {
     const user = await this.prismaService.user.findFirst({
       where: { email: data.email },
     });

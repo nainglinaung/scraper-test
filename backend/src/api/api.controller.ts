@@ -9,17 +9,14 @@ import {
   Request,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  CreateSearchResult,
-  QuerySearchResult,
-} from 'src/DTO/search-result.dto';
+import { CreateSearchResult, QuerySearchResult } from './search-result.dto';
 
 import { ApiService } from './api.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { createReadStream } from 'fs';
 import { CsvParser } from 'nest-csv-parser';
-import { CSVInputDTO } from 'src/DTO/job.dto';
+import { CSVEntity } from './types';
 import { AccessTokenGuard } from 'src/auth/AccessTokenGuard';
 
 @UseGuards(AccessTokenGuard)
@@ -53,7 +50,7 @@ export class ApiController {
   )
   async uploadCSV(@UploadedFile() file: Express.Multer.File, @Request() req) {
     const stream = createReadStream(file.path);
-    const entities = await this.csvParser.parse(stream, CSVInputDTO);
+    const entities = await this.csvParser.parse(stream, CSVEntity);
 
     for (const data of entities.list) {
       await this.apiService.crawl({

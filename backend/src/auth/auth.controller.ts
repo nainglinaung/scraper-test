@@ -8,7 +8,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDTO, RegisterDTO } from 'src/DTO/auth.dto';
+import { LoginDTO, RegisterDTO } from './auth.dto';
 import { AccessTokenGuard } from './AccessTokenGuard';
 
 @UseInterceptors(ClassSerializerInterceptor)

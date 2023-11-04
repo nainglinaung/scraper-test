@@ -1,8 +1,6 @@
 // src/bull/bull.service.ts
 import { Injectable } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { CSVInputDTO } from '../DTO/job.dto';
-import { RawDataParam } from 'src/DTO/search-result.dto';
 import { Queue, Worker } from 'bullmq';
 import { CrawlerService } from './crawler.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -27,27 +25,22 @@ export class BullService {
 
   async processJobs(): Promise<void> {
     new Worker('scrape-search-result', async (job) => {
-      const input: CSVInputDTO = job.data;
+      const { keyword, user_id } = job.data;
       const keywordData = await this.prismaService.search_results.findFirst({
-        where: { keyword: input.keyword, user_id: input.user_id },
+        where: { keyword, user_id },
       });
 
       if (!keywordData) {
-        const rawData = new RawDataParam();
+        const raw_html = await this.crawlerService.getSearchResultData(keyword);
+        const formattedData = this.crawlerService.formatData(raw_html);
 
-        rawData.keyword = input.keyword;
-        rawData.user_id = input.user_id;
-        rawData.raw_html = await this.crawlerService.getSearchResultData(
-          input.keyword,
-        );
-
-        const formattedData = this.crawlerService.formatData(rawData);
-
-        await this.prismaService.search_results.create({ data: formattedData });
+        await this.prismaService.search_results.create({
+          data: { ...formattedData, keyword, user_id },
+        });
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        this.logger.log(`finished processing ${input.keyword}`);
+        this.logger.log(`finished processing ${keyword}`);
       } else {
-        this.logger.log(`${input.keyword} already existed`);
+        this.logger.log(`${keyword} already existed`);
       }
     });
   }

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import { getRandom } from 'random-useragent';
-import { CreateSearchResult, RawDataParam } from 'src/DTO/search-result.dto';
 import { Logger } from '@nestjs/common';
 @Injectable()
 export class CrawlerService {
@@ -24,9 +23,9 @@ export class CrawlerService {
     }
   }
 
-  formatData(data: RawDataParam): CreateSearchResult {
+  formatData(raw_html) {
     try {
-      const $ = cheerio.load(data.raw_html);
+      const $ = cheerio.load(raw_html);
       const adswords_count = $('span:contains("Sponsored")').length;
       const total_search_result_for_keyword = $('#result-stats').html();
       const link_count = $('a').length;
@@ -35,7 +34,7 @@ export class CrawlerService {
         adswords_count,
         total_search_result_for_keyword,
         link_count,
-        ...data,
+        raw_html,
       };
     } catch (error) {
       this.logger.error(error);

@@ -25,19 +25,4 @@ export class CreateSearchResult {
 export class QuerySearchResult {
   @IsString()
   readonly keyword: string;
-
-  @IsNumber()
-  readonly user_id: number;
-}
-
-export class RawDataParam {
-  @IsNotEmpty()
-  raw_html: string;
-
-  @IsNotEmpty()
-  keyword: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  user_id: number;
 }
