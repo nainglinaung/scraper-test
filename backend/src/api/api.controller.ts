@@ -2,12 +2,15 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateSearchResult } from 'src/DTO/search-result.dto';
+import {
+  CreateSearchResult,
+  QuerySearchResult,
+} from 'src/DTO/search-result.dto';
 
 import { ApiService } from './api.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -23,9 +26,9 @@ export class ApiController {
     private readonly csvParser: CsvParser,
   ) {}
 
-  @Get(':keyword')
-  findByKeyword(@Param('keyword') keyword: string) {
-    return this.apiService.findByKeyword(keyword);
+  @Get('/')
+  findByKeyword(@Query() query: QuerySearchResult) {
+    return this.apiService.findByKeyword(query.keyword);
   }
 
   @Post('/crawl')
