@@ -5,6 +5,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -18,7 +19,7 @@ import { diskStorage } from 'multer';
 import { createReadStream } from 'fs';
 import { CsvParser } from 'nest-csv-parser';
 import { CSVInputDTO } from 'src/DTO/job.dto';
-
+import { AccessTokenGuard } from 'src/auth/AccessTokenGuard';
 @Controller('search-result')
 export class ApiController {
   constructor(
@@ -26,6 +27,7 @@ export class ApiController {
     private readonly csvParser: CsvParser,
   ) {}
 
+  @UseGuards(AccessTokenGuard)
   @Get('/')
   findByKeyword(@Query() query: QuerySearchResult) {
     return this.apiService.findByKeyword(query.keyword);

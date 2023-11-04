@@ -5,11 +5,12 @@ import { ApiController } from './api.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { CsvModule } from 'nest-csv-parser';
 import { MulterModule } from '@nestjs/platform-express';
-
+import { AuthModule } from 'src/auth/auth.module';
 @Module({
   providers: [ApiService],
   exports: [ApiService],
   imports: [
+    AuthModule,
     BullQueueModule,
     PrismaModule,
     CsvModule,
