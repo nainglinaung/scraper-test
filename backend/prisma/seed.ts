@@ -7,6 +7,13 @@ const prisma = new PrismaClient();
 
 async function main() {
   // create two dummy articles
+  const user1 = await prisma.user.create({
+    data: {
+      email: 'test@gmail.com',
+      password: 'hello',
+    },
+  });
+
   const post1 = await prisma.search_results.create({
     data: {
       adswords_count: 10,
@@ -14,10 +21,11 @@ async function main() {
       link_count: 10,
       total_search_result_for_keyword: '20',
       raw_html: 'asdsad',
+      user_id: 1,
     },
   });
 
-  console.log({ post1 });
+  console.log({ post1, user1 });
 }
 
 // execute the main function
