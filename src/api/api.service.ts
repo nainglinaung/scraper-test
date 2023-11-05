@@ -9,11 +9,20 @@ export class ApiService {
   constructor(
     private primsaService: PrismaService,
     private bullservice: BullService,
-  ) {}
+  ) { }
 
-  findByKeyword(query): Promise<SearchResult[]> {
+  findByKeyword(query): Promise<any> {
     return this.primsaService.search_results.findMany({
       where: { keyword: query.keyword, user_id: query.user_id },
+      select: {
+        id: true,
+        keyword: true,
+        link_count: true,
+        total_search_result_for_keyword: true,
+        adswords_count: true,
+      },
+      take: parseInt(query.take || 10),
+      skip: parseInt(query.skip || 0),
     });
   }
 

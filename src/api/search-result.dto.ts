@@ -24,4 +24,6 @@ export class CreateSearchResult {
 
 export class QuerySearchResult {
   readonly keyword: string;
+  readonly skip: number;
+  readonly take: number;
 }
