@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import { getRandom } from 'random-useragent';
 import { Logger } from '@nestjs/common';
+
 @Injectable()
 export class CrawlerService {
   private readonly logger = new Logger(CrawlerService.name);
