@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from '@nestjs/class-validator';
+import { IsNotEmpty, IsNumber } from '@nestjs/class-validator';
 
 export class CreateSearchResult {
   @IsNumber()
@@ -23,6 +23,5 @@ export class CreateSearchResult {
 }
 
 export class QuerySearchResult {
-  @IsString()
   readonly keyword: string;
 }

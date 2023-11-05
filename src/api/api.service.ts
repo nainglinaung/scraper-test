@@ -11,8 +11,8 @@ export class ApiService {
     private bullservice: BullService,
   ) {}
 
-  findByKeyword(query): Promise<SearchResult> {
-    return this.primsaService.search_results.findFirst({
+  findByKeyword(query): Promise<SearchResult[]> {
+    return this.primsaService.search_results.findMany({
       where: { keyword: query.keyword, user_id: query.user_id },
     });
   }
