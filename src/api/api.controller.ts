@@ -9,6 +9,7 @@ import {
   Request,
   UseInterceptors,
 } from '@nestjs/common';
+
 import { CreateSearchResult, QuerySearchResult } from './search-result.dto';
 
 import { ApiService } from './api.service';
