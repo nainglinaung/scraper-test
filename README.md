@@ -4,7 +4,7 @@
 
 ## Description
 
-This is the backend part of the app. To check out the frontend, please click here.
+This is the backend part of the app. To check out the frontend, please click [here](https://github.com/nainglinaung/scaper-dashboard).
 
 ## Docker Compose
 
