@@ -19,7 +19,12 @@ export class ApiService {
 
   findByKeyword(query): Promise<any> {
     return this.primsaService.search_results.findMany({
-      where: { keyword: query.keyword, user_id: query.user_id },
+      where: {
+        keyword: {
+          contains: query.keyword,
+        },
+        user_id: query.user_id,
+      },
       select: {
         id: true,
         keyword: true,
