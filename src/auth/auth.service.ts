@@ -8,12 +8,16 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async createUser(data) {
     const saltOrRounds = 10;
     data.password = await bcrypt.hash(data.password, saltOrRounds);
-    return this.prismaService.user.create({ data });
+    const user = await this.prismaService.user.create({ data });
+    const payload = { sub: user.id };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
   }
 
   findById(id) {

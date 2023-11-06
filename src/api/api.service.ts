@@ -12,7 +12,6 @@ export class ApiService {
   ) { }
 
   findById(id: number) {
-    console.log(typeof id);
     return this.primsaService.search_results.findFirst({
       where: { id },
     });
