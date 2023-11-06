@@ -2,13 +2,21 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
+## Description
 
+This is the backend part of the app. To check out the frontend, please click here.
 
 ## Docker Compose
 
-docker compose up -d 
+To start the Docker Compose setup in detached mode, use the following command:
+
+```bash
+$ docker compose up -d 
+```
 
 ## Installation
+
+To install the required dependencies, run the following command:
 
 ```bash
 $ npm install
@@ -16,9 +24,15 @@ $ npm install
 
 ## Prisma Migration 
 
+To execute Prisma migrations in development mode, use this command:
 
+```bash
+$ npx prisma migrate dev
+```
 
 ## Running the app
+
+You can run the application in different modes using these commands:
 
 ```bash
 # development
@@ -36,24 +50,4 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
