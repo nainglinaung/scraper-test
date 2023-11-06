@@ -8,6 +8,7 @@ import {
   UseGuards,
   Request,
   UseInterceptors,
+  Param,
 } from '@nestjs/common';
 
 import { CreateSearchResult, QuerySearchResult } from './search-result.dto';
@@ -30,11 +31,15 @@ export class ApiController {
 
   @Get('/')
   findByKeyword(@Query() query: QuerySearchResult, @Request() req) {
-
     return this.apiService.findByKeyword({
       ...query,
       user_id: req.user.id,
     });
+  }
+
+  @Get('/:id')
+  findById(@Param('id') id: string) {
+    return this.apiService.findById(parseInt(id));
   }
 
   @Post('/crawl')

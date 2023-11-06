@@ -11,6 +11,13 @@ export class ApiService {
     private bullservice: BullService,
   ) { }
 
+  findById(id: number) {
+    console.log(typeof id);
+    return this.primsaService.search_results.findFirst({
+      where: { id },
+    });
+  }
+
   findByKeyword(query): Promise<any> {
     return this.primsaService.search_results.findMany({
       where: { keyword: query.keyword, user_id: query.user_id },
@@ -21,8 +28,6 @@ export class ApiService {
         total_search_result_for_keyword: true,
         adswords_count: true,
       },
-      take: parseInt(query.take || 10),
-      skip: parseInt(query.skip || 0),
     });
   }
 
