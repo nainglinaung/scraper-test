@@ -17,12 +17,13 @@ export class AuthController {
 
   @Post('/login')
   async login(@Body() data: LoginDTO) {
+    this.logger.log('/login route');
     return this.authService.login(data);
   }
 
   @Post('/register')
   register(@Body() credential: RegisterDTO) {
-    this.logger.log(credential);
+    this.logger.log('/register route');
     return this.authService.createUser(credential);
   }
 }
