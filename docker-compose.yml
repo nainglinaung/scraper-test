@@ -18,7 +18,7 @@ services:
     environment:
       POSTGRES_DB: scraping
       POSTGRES_USER: superuser
-      POSTGRES_PASSWORD: n
+      POSTGRES_PASSWORD: poweruser12345
 
 networks:
   mynetwork:
