@@ -28,6 +28,7 @@ export class ApiService {
         user_id,
       });
     }
+    return { status: 'success' };
   }
 
   findByKeyword(query): Promise<any> {
