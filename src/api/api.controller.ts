@@ -27,7 +27,7 @@ export class ApiController {
   constructor(
     private apiService: ApiService,
     private readonly csvParser: CsvParser,
-  ) { }
+  ) {}
 
   @Get('/')
   findByKeyword(@Query() query: QuerySearchResult, @Request() req) {
@@ -65,6 +65,8 @@ export class ApiController {
         user_id: req.user.id,
       });
     }
+
+    return { status: 'success' };
   }
 
   @Post('/')
