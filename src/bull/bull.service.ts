@@ -34,7 +34,7 @@ export class BullService {
         where: {
           id,
         },
-        data: { ...formattedData },
+        data: { ...formattedData, keyword_status: 'Done' },
       });
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
