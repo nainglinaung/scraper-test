@@ -18,12 +18,19 @@ describe('CrawlerService', () => {
 
   describe('getSearchResultData', () => {
     it('should return HTML content from Google search', async () => {
-      const keyword = 'testKeyword';
+      const mockResponse = 'Mocked Google Search Results';
 
-      const htmlContent = await crawlerService.getSearchResultData(keyword);
+      const mockFetch = jest.fn().mockResolvedValue({
+        text: jest.fn().mockResolvedValue(mockResponse),
+      });
 
-      // You can add more specific assertions on the HTML content if needed
+      global.fetch = mockFetch;
+
+      const htmlContent =
+        await crawlerService.getSearchResultData('testKeyword');
+
       expect(htmlContent).toBeDefined();
+      expect(htmlContent).toEqual(mockResponse);
     });
   });
 
