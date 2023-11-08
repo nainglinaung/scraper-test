@@ -23,6 +23,12 @@ export class BullService {
     return this.queue.add('scrape-data', data);
   }
 
+  async sleepAtRandomInterval() {
+    const randomDelay = Math.floor(Math.random() * 5000) + 1000;
+    this.logger.log(`sleep for ${randomDelay / 1000} seconds`);
+    await new Promise((resolve) => setTimeout(resolve, randomDelay));
+  }
+
   async processJobs(): Promise<void> {
     new Worker('scrape-search-result', async (job) => {
       const { keyword, user_id } = job.data;
@@ -33,11 +39,10 @@ export class BullService {
       if (!keywordData) {
         const raw_html = await this.crawlerService.getSearchResultData(keyword);
         const formattedData = this.crawlerService.formatData(raw_html);
-
+        await this.sleepAtRandomInterval();
         await this.prismaService.search_results.create({
           data: { ...formattedData, keyword, user_id },
         });
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         this.logger.log(`finished processing ${keyword}`);
       } else {
         this.logger.log(`${keyword} already existed`);
