@@ -9,7 +9,7 @@ export class ApiService {
   constructor(
     private primsaService: PrismaService,
     private bullservice: BullService,
-  ) { }
+  ) {}
 
   findById(id: number) {
     return this.primsaService.search_results.findFirst({
@@ -39,9 +39,17 @@ export class ApiService {
     return this.bullservice.addJob(data);
   }
 
-  create(createSearchResult): Promise<SearchResult> {
+  create(data): Promise<SearchResult> {
     return this.primsaService.search_results.create({
-      data: createSearchResult,
+      data,
     });
+  }
+
+  batchCreate(data) {
+    return this.primsaService.$transaction(
+      data.map((record) =>
+        this.primsaService.search_results.create({ data: record }),
+      ),
+    );
   }
 }
