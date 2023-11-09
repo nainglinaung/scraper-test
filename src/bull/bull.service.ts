@@ -7,6 +7,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { BullQueueService } from './bull-queue.service';
 import { Logger } from '@nestjs/common';
 
+const MAXIMUM_DELAY_IN_SECONDS = 5;
+
 @Injectable()
 export class BullService {
   private queue: Queue;
@@ -20,7 +22,9 @@ export class BullService {
   }
 
   async addJob(data: Record<string, any>): Promise<Job> {
-    return this.queue.add('scrape-data', data);
+    return this.queue.add('scrape-data', data, {
+      delay: Math.floor(Math.random() * MAXIMUM_DELAY_IN_SECONDS) + 1,
+    });
   }
 
   async processJobs(): Promise<void> {
@@ -38,7 +42,6 @@ export class BullService {
       });
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      this.logger.log(`finished processing ${keyword}`);
     });
   }
 }
