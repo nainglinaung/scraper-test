@@ -7,6 +7,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { BullQueueService } from './bull-queue.service';
 import { Logger } from '@nestjs/common';
 
+const MaximumDelaySec = 5;
+
 @Injectable()
 export class BullService {
   private queue: Queue;
@@ -20,13 +22,9 @@ export class BullService {
   }
 
   async addJob(data: Record<string, any>): Promise<Job> {
-    return this.queue.add('scrape-data', data);
-  }
-
-  async sleepAtRandomInterval() {
-    const randomDelay = Math.floor(Math.random() * 5000) + 1000;
-    this.logger.log(`sleep for ${randomDelay / 1000} seconds`);
-    await new Promise((resolve) => setTimeout(resolve, randomDelay));
+    return this.queue.add('scrape-data', data, {
+      delay: Math.floor(Math.random() * MaximumDelaySec) + 1,
+    });
   }
 
   async processJobs(): Promise<void> {
@@ -39,7 +37,6 @@ export class BullService {
       if (!keywordData) {
         const raw_html = await this.crawlerService.getSearchResultData(keyword);
         const formattedData = this.crawlerService.formatData(raw_html);
-        await this.sleepAtRandomInterval();
         await this.prismaService.search_results.create({
           data: { ...formattedData, keyword, user_id },
         });

@@ -27,7 +27,7 @@ export class ApiController {
   constructor(
     private apiService: ApiService,
     private readonly csvParser: CsvParser,
-  ) { }
+  ) {}
 
   @Get('/')
   findByKeyword(@Query() query: QuerySearchResult, @Request() req) {

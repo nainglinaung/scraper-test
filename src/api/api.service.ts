@@ -9,7 +9,7 @@ export class ApiService {
   constructor(
     private primsaService: PrismaService,
     private bullservice: BullService,
-  ) { }
+  ) {}
 
   findById(id: number) {
     return this.primsaService.search_results.findFirst({
