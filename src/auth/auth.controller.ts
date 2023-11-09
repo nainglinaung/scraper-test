@@ -13,17 +13,15 @@ import { LoginDTO, RegisterDTO } from './auth.dto';
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthService.name);
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
-  async login(@Body() data: LoginDTO) {
-    this.logger.log('/login route');
+  login(@Body() data: LoginDTO) {
     return this.authService.login(data);
   }
 
   @Post('/register')
   register(@Body() credential: RegisterDTO) {
-    this.logger.log('/register route');
     return this.authService.createUser(credential);
   }
 }
