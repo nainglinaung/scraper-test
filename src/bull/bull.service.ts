@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { BullQueueService } from './bull-queue.service';
 import { Logger } from '@nestjs/common';
 
-const MaximumDelaySec = 5;
+const MAXIMUM_DELAY_IN_SECONDS = 5;
 
 @Injectable()
 export class BullService {
@@ -23,7 +23,7 @@ export class BullService {
 
   async addJob(data: Record<string, any>): Promise<Job> {
     return this.queue.add('scrape-data', data, {
-      delay: Math.floor(Math.random() * MaximumDelaySec) + 1,
+      delay: Math.floor(Math.random() * MAXIMUM_DELAY_IN_SECONDS) + 1,
     });
   }
 
