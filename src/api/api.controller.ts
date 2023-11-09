@@ -59,12 +59,15 @@ export class ApiController {
     const stream = createReadStream(file.path);
     const entities = await this.csvParser.parse(stream, CSVEntity);
 
-    for (const data of entities.list) {
-      await this.apiService.crawl({
-        keyword: data.keyword,
+    const mapData = entities.list.map(({ keyword }) => {
+      return {
+        keyword,
         user_id: req.user.id,
-      });
-    }
+      };
+    });
+    const records = await this.apiService.batchCreate(mapData);
+
+    await Promise.all(records.map((data) => this.apiService.crawl(data)));
 
     return { status: 'success' };
   }

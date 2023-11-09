@@ -8,13 +8,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+enum scraping_status                   {
+  Inprogress @map("in-progress")
+  Failed  @map("failed")
+  Done @map("done")
+}
+
 model search_results {
   id                              Int      @id @default(autoincrement())
-  adswords_count                  Int
+  adswords_count                  Int?     
   keyword                         String
+  scraping_status                 scraping_status @default(Inprogress)
   link_count                      Int?
   total_search_result_for_keyword String?
-  raw_html                        String
+  raw_html                        String?
   user_id                         Int
   user                            User     @relation(fields: [user_id], references: [id])
   createdAt                       DateTime @default(now())

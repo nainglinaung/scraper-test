@@ -29,21 +29,19 @@ export class BullService {
 
   async processJobs(): Promise<void> {
     new Worker('scrape-search-result', async (job) => {
-      const { keyword, user_id } = job.data;
-      const keywordData = await this.prismaService.search_results.findFirst({
-        where: { keyword, user_id },
+      const { keyword, id } = job.data;
+
+      const raw_html = await this.crawlerService.getSearchResultData(keyword);
+      const formattedData = this.crawlerService.formatData(raw_html);
+
+      await this.prismaService.search_results.update({
+        where: {
+          id,
+        },
+        data: { ...formattedData, keyword_status: 'Done' },
       });
 
-      if (!keywordData) {
-        const raw_html = await this.crawlerService.getSearchResultData(keyword);
-        const formattedData = this.crawlerService.formatData(raw_html);
-        await this.prismaService.search_results.create({
-          data: { ...formattedData, keyword, user_id },
-        });
-        this.logger.log(`finished processing ${keyword}`);
-      } else {
-        this.logger.log(`${keyword} already existed`);
-      }
+      await new Promise((resolve) => setTimeout(resolve, 3000));
     });
   }
 }
