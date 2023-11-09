@@ -9,8 +9,9 @@ datasource db {
 }
 
 
-enum keyword_status {
+enum scraping_status                   {
   Inprogress @map("in-progress")
+  Failed  @map("failed")
   Done @map("done")
 }
 
@@ -18,7 +19,7 @@ model search_results {
   id                              Int      @id @default(autoincrement())
   adswords_count                  Int?     
   keyword                         String
-  keyword_status                  keyword_status @default(Inprogress)
+  scraping_status                 scraping_status @default(Inprogress)
   link_count                      Int?
   total_search_result_for_keyword String?
   raw_html                        String?
