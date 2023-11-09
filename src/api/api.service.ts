@@ -4,9 +4,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchResult } from './types';
 import { Job } from 'bullmq';
 
+const KEYWORD_LIMIT = 100;
+
 @Injectable()
 export class ApiService {
-  private keyword_limit = 100;
   constructor(
     private primsaService: PrismaService,
     private bullservice: BullService,
@@ -19,7 +20,7 @@ export class ApiService {
   }
 
   async uploadCSV(entities, user_id) {
-    if (entities.list.length > this.keyword_limit) {
+    if (entities.list.length > KEYWORD_LIMIT) {
       throw new NotAcceptableException('exceed the limit of keyword per csv');
     }
     for (const data of entities.list) {
