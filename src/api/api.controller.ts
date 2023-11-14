@@ -58,15 +58,7 @@ export class ApiController {
   async uploadCSV(@UploadedFile() file: Express.Multer.File, @Request() req) {
     const stream = createReadStream(file.path);
     const entities = await this.csvParser.parse(stream, CSVEntity);
-
-    for (const data of entities.list) {
-      await this.apiService.crawl({
-        keyword: data.keyword,
-        user_id: req.user.id,
-      });
-    }
-
-    return { status: 'success' };
+    return this.apiService.uploadCSV(entities, req.user.id);
   }
 
   @Post('/')
